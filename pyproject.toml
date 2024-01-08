@@ -1,1 +1,11 @@
+[tool.poetry]
+name = "nonebot_plugin_wx4"
+version = "1.0.0"
+description = "文心4的简易适配"
+authors = []
+repository = "https://github.com/Pasumao/nonebot-plugin-wx4"
 
+[tool.poetry.dependencies]
+python = "^3.6"
+nonebot2 = "^2.0.0"
+nonebot-adapter-onebot = "^2.0.0"
