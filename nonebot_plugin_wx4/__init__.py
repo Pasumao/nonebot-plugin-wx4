@@ -2,11 +2,11 @@ from nonebot import on_command
 from nonebot.adapters import Event
 from nonebot.adapters.onebot.v11 import Message,PrivateMessageEvent
 from nonebot.params import CommandArg
-from ConversationStorage import ConversationStorage
+from .ConversationStorage import ConversationStorage
 
 from nonebot.plugin import PluginMetadata
 
-from .config import Config
+from .config import MyPluginConfig
 
 __plugin_meta__ = PluginMetadata(
     name="文心一言4适配",
@@ -17,10 +17,11 @@ __plugin_meta__ = PluginMetadata(
 
     homepage="https://github.com/Pasumao/nonebot-plugin-wx4",
 
-    config=Config,
+    config=MyPluginConfig,
 
     supported_adapters={"~onebot.v11",},
 )
+Config=MyPluginConfig.Config
 
 wx=on_command("文心",block=True, priority=1)
 clear_wx = on_command("失忆术", block=True, priority=1)

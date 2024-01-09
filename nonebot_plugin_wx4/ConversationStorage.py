@@ -2,7 +2,7 @@ import sqlite3
 import json  
 import hashlib  
 import requests  
-from config import *
+from .config import *
 
 class ConversationStorage:  
     API_Key = Config.API_KEY
