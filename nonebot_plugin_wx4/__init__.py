@@ -3,9 +3,7 @@ from nonebot.adapters import Event
 from nonebot.adapters.onebot.v11 import Message,PrivateMessageEvent
 from nonebot.params import CommandArg
 from .ConversationStorage import ConversationStorage
-
 from nonebot.plugin import PluginMetadata
-
 from .config import MyPluginConfig
 
 __plugin_meta__ = PluginMetadata(
@@ -31,14 +29,16 @@ wxbot=ConversationStorage(Config.DBNAME)
 @wx.handle()
 async def wx_handle(foo:Event,cmd: Message = CommandArg()):
     #指定的群聊或者私聊
+    user_id,group_id=get_id(foo)
     if grouplim(user_id,group_id) or isinstance(foo, PrivateMessageEvent):
         pass
     else:
+        print(111)
         return
-    user_id,group_id=get_id(foo)
+    
     content = cmd.extract_plain_text()
     await wx.send('请稍等')
-    res=wxbot.send_message(user_id,group_id,content)
+    res=await wxbot.send_message(user_id,group_id,content)
     await wx.finish(res)
 
 @clear_wx.handle()

@@ -1,13 +1,15 @@
 import sqlite3  
 import json  
 import hashlib  
-import requests  
-from .config import *
+import httpx  
+from .config import *  
 
-Config=MyPluginConfig.Config
+  
+Config = MyPluginConfig.Config  
+  
 class ConversationStorage:  
-    API_Key = Config.API_KEY
-    Secret_Key = Config.SECRET_KEY
+    API_Key = Config.API_KEY  
+    Secret_Key = Config.SECRET_KEY  
     max_messages = Config.MAX_MESSAGES  # 设置最大对话次数  
   
     def __init__(self, db_name):  
@@ -37,29 +39,30 @@ class ConversationStorage:
             else:  
                 return None  
   
-    def send_message(self, user_id, group_id, content):  
-        def get_access_token():  
+    async def send_message(self, user_id, group_id, content):  
+        async def get_access_token():  
             url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={self.API_Key}&client_secret={self.Secret_Key}"  
-            response = requests.post(url)  
-            return response.json().get("access_token")  
+            async with httpx.AsyncClient() as client:  
+                response = await client.post(url)  
+                return response.json().get("access_token")  
   
         conversation = self.read_conversation(user_id, group_id) or {"messages": []}  
   
         new_message = {"role": "user", "content": content}  
         conversation["messages"].append(new_message)  
-  
-        access_token = get_access_token()  
+        access_token = await get_access_token()  
         url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token={access_token}"  
         headers = {'Content-Type': 'application/json'}  
-        response = requests.post(url, headers=headers, json=conversation)  
-  
+        async with httpx.AsyncClient() as client:  
+            response = await client.post(url, headers=headers, json=conversation,timeout=60.0)  
+        print(response.json())
         result_str = response.json().get("result")  
         new_message = {"role": "assistant", "content": result_str}  
         conversation["messages"].append(new_message)  
-
-        if len(conversation["messages"])+1 >= self.max_messages *2:  
-            self.clear(user_id, group_id)
-            return result_str+"\n\n超出对话长度，已清空对话记录"
+  
+        if len(conversation["messages"]) >= self.max_messages * 2:  
+            self.clear(user_id, group_id)  
+            return result_str + "\n\n超出对话长度，已清空对话记录"  
   
         self.write_conversation(user_id, group_id, conversation)  
         return result_str  

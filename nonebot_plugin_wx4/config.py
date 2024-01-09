@@ -21,8 +21,8 @@ class MyPluginConfig(BaseModel):
         #数据库名字
         DBNAME="wxbot.db"
 
-        API_KEY = ""  
-        SECRET_KEY = ""  
+        API_KEY = "" 
+        SECRET_KEY = ""   
 
         #最大对话记忆
         MAX_MESSAGES = 5  
