@@ -23,7 +23,8 @@ _✨ NoneBot 插件简单描述 ✨_
 
 ## 📖 介绍
 
-简易千帆平台文心4适配
+简易千帆平台文心4适配,支持带记忆的文心对话，记忆是根据群号+QQ号组合的哈希值来唯一确定
+千帆平台的应用获取请自行到<a href="https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application">百度智能云</a>探索
 
 ## 💿 安装
 
