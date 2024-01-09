@@ -4,6 +4,7 @@ import hashlib
 import requests  
 from .config import *
 
+Config=MyPluginConfig.Config
 class ConversationStorage:  
     API_Key = Config.API_KEY
     Secret_Key = Config.SECRET_KEY
